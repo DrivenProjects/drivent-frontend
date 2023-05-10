@@ -1,16 +1,57 @@
 import styled from 'styled-components';
 import PaymentSucess from '../../../components/PaymentSucess';
 import ChoosenTicket from '../../../components/ChoosenTicket';
+import useEnrollment from '../../../hooks/api/useEnrollment';
+import { Title, Instructions, Div, Content, Presencial, Online, InstructionsNoEnroll } from '../../../components/Dashboard/Payments/payment';
 
 export default function Payment() {
+  const { enrollment } = useEnrollment();
+
   return (
-    <Container>
-      <h1>Ingresso e pagamento</h1>
-      {/* <h3>Primeiro, escolha sua modalidade de ingresso</h3> */}
-      <h3>Ingresso escolhido</h3>
-      <ChoosenTicket />
-      <PaymentSucess />
-    </Container>
+
+    <div>
+      {enrollment ? (
+        <>
+          <Title>
+        Ingresso e Pagamento
+          </Title>
+
+          <Instructions>
+          Primeiro, escolha sua modalidade de ingresso
+          </Instructions>
+
+          <Content>
+            <Div>
+              <Presencial >
+                <h2>Presencial</h2> 
+                <h3>R$ 250</h3>
+              </Presencial> 
+
+              <Online>
+                <h2>Online</h2> 
+                <h3>R$ 100</h3>
+              </Online>
+            </Div>
+          </Content>
+        </>
+      ) : (
+        <>
+          <Title>
+            Ingresso e Pagamento
+          </Title>
+          <InstructionsNoEnroll>
+            Você precisa completar sua inscrição antes
+            de prosseguir pra escolha de ingresso
+          </InstructionsNoEnroll>
+        </>
+      )}
+      {/* ///////////// Comentando para implementação de primeira tela ///////////       
+      <Container>
+        <h3>Ingresso escolhido</h3>
+        <ChoosenTicket />
+        <PaymentSucess />
+      </Container> */}
+    </div>
   );
 }
 
