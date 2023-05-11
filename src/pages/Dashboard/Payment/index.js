@@ -5,7 +5,7 @@ import ChoosenTicket from '../../../components/ChoosenTicket';
 import useEnrollment from '../../../hooks/api/useEnrollment';
 import CreditCardForm from '../../../components/CreditCardForm';
 import { Title, Instructions, Div, Content, Presencial, Online, InstructionsNoEnroll, NoHotel, WithHotel } from '../../../components/Dashboard/Payments/payment';
-
+// testing commit message
 export default function Payment() {
   const { enrollment } = useEnrollment();
   const [opcaoSelecionada, setOpcaoSelecionada] = useState('');
