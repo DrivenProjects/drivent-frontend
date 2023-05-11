@@ -49,7 +49,7 @@ export const Content = styled.div`
   flex-direction: row;
 `;
 
-export const Presencial = styled.div`
+export const Box = styled.div`
   height: 145px;
   width: 145px;
   border-radius: 20px;
@@ -61,20 +61,20 @@ export const Presencial = styled.div`
   flex-direction: column;
   font-family: 'Roboto', sans-serif;
   cursor: pointer;
-  background-color: ${(prop) => prop.opcaoSelecionada === 'opcao1' ? '#FFEED2' : '#FFFFFF'};
 `;
 
-export const Online = styled.div`
-  height: 145px;
-  width: 145px;
-  border-radius: 20px;
-  border: 1px solid #CECECE;
-  margin: 17px 24px 7px 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  font-family: 'Roboto', sans-serif;
-  cursor: pointer;
-  background-color: ${(prop) => prop.opcaoSelecionada === 'opcao2' ? '#FFEED2' : '#FFFFFF'};
+export const Presencial = styled(Box)`
+  background-color: ${(prop) => prop.opcaoSelecionada === 'presencial' ? '#FFEED2' : '#FFFFFF'};
+`;
+
+export const Online = styled(Box)`
+  background-color: ${(prop) => prop.opcaoSelecionada === 'online' ? '#FFEED2' : '#FFFFFF'};
+`;
+
+export const NoHotel = styled(Box)`
+  background-color: ${(prop) => prop.opcaoHotelSelecionada === 'noHotel' ? '#FFEED2' : '#FFFFFF'};
+`;
+
+export const WithHotel = styled(Box)`
+  background-color: ${(prop) => prop.opcaoHotelSelecionada === 'withHotel' ? '#FFEED2' : '#FFFFFF'};
 `;
