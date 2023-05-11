@@ -3,6 +3,7 @@ import PaymentSucess from '../../../components/PaymentSucess';
 import ChoosenTicket from '../../../components/ChoosenTicket';
 import useEnrollment from '../../../hooks/api/useEnrollment';
 import { Title, Instructions, Div, Content, Presencial, Online, InstructionsNoEnroll } from '../../../components/Dashboard/Payments/payment';
+import CreditCardForm from '../../../components/CreditCardForm';
 
 export default function Payment() {
   const { enrollment } = useEnrollment();
@@ -45,7 +46,8 @@ export default function Payment() {
           </InstructionsNoEnroll>
         </>
       )}
-      {/* ///////////// Comentando para implementação de primeira tela ///////////       
+      {/*
+      ///////////// Comentando para implementação de primeira tela ///////////       
       <Container>
         <h3>Ingresso escolhido</h3>
         <ChoosenTicket />
