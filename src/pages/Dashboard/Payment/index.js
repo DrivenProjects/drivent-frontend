@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import React, { useState } from 'react';
 import PaymentSucess from '../../../components/PaymentSucess';
 import ChoosenTicket from '../../../components/ChoosenTicket';
 import useEnrollment from '../../../hooks/api/useEnrollment';
@@ -6,6 +7,15 @@ import { Title, Instructions, Div, Content, Presencial, Online, InstructionsNoEn
 
 export default function Payment() {
   const { enrollment } = useEnrollment();
+  const [opcaoSelecionada, setOpcaoSelecionada] = useState('');
+
+  function handleOpcaoClicada(opcao) {
+    if (opcao === opcaoSelecionada) {
+      setOpcaoSelecionada(null);
+    } else {
+      setOpcaoSelecionada(opcao);
+    }
+  }
 
   return (
 
@@ -22,12 +32,14 @@ export default function Payment() {
 
           <Content>
             <Div>
-              <Presencial >
+              <Presencial opcaoSelecionada={opcaoSelecionada}  checked={opcaoSelecionada === 'opcao1'}
+                onClick={() => handleOpcaoClicada('opcao1')} >
                 <h2>Presencial</h2> 
                 <h3>R$ 250</h3>
               </Presencial> 
 
-              <Online>
+              <Online opcaoSelecionada={opcaoSelecionada} checked={opcaoSelecionada === 'opcao2'}
+                onClick={() => handleOpcaoClicada('opcao2')}>
                 <h2>Online</h2> 
                 <h3>R$ 100</h3>
               </Online>

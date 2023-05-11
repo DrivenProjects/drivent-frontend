@@ -61,6 +61,7 @@ export const Presencial = styled.div`
   flex-direction: column;
   font-family: 'Roboto', sans-serif;
   cursor: pointer;
+  background-color: ${(prop) => prop.opcaoSelecionada === 'opcao1' ? '#FFEED2' : '#FFFFFF'};
 `;
 
 export const Online = styled.div`
@@ -75,4 +76,5 @@ export const Online = styled.div`
   flex-direction: column;
   font-family: 'Roboto', sans-serif;
   cursor: pointer;
+  background-color: ${(prop) => prop.opcaoSelecionada === 'opcao2' ? '#FFEED2' : '#FFFFFF'};
 `;
