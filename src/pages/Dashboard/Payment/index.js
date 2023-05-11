@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import PaymentSucess from '../../../components/PaymentSucess';
 import ChoosenTicket from '../../../components/ChoosenTicket';
 import useEnrollment from '../../../hooks/api/useEnrollment';
+import CreditCardForm from '../../../components/CreditCardForm';
 import { Title, Instructions, Div, Content, Presencial, Online, InstructionsNoEnroll, NoHotel, WithHotel } from '../../../components/Dashboard/Payments/payment';
 
 export default function Payment() {
@@ -118,7 +119,8 @@ export default function Payment() {
           </InstructionsNoEnroll>
         </>
       )}
-      {/* ///////////// Comentando para implementação de primeira tela ///////////       
+      {/*
+      ///////////// Comentando para implementação de primeira tela ///////////       
       <Container>
         <h3>Ingresso escolhido</h3>
         <ChoosenTicket />
