@@ -10,6 +10,7 @@ export default function Payment() {
   const { enrollment } = useEnrollment();
   const [opcaoSelecionada, setOpcaoSelecionada] = useState('');
   const [opcaoHotelSelecionada, setOpcaoHotelSelecionada] = useState('');
+  const [tela, setTela] = useState('paying');
 
   function handleOpcaoClicadaTicket(opcao) {
     if (opcao === opcaoSelecionada) {
@@ -29,96 +30,108 @@ export default function Payment() {
   return (
 
     <>
-      {enrollment ? (
-        <>
-          <Title>
+      <Title>
         Ingresso e Pagamento
-          </Title>
-
-          <Instructions>
-          Primeiro, escolha sua modalidade de ingresso
-          </Instructions>
-
-          <Content>
+      </Title>
+      {
+        tela === 'escolha' ? (
+          enrollment ? (
             <>
-              <Presencial opcaoSelecionada={opcaoSelecionada}  checked={opcaoSelecionada === 'presencial'}
-                onClick={() => handleOpcaoClicadaTicket('presencial')} >
-                <h2>Presencial</h2> 
-                <h3>R$ 250</h3>
-              </Presencial> 
 
-              <Online opcaoSelecionada={opcaoSelecionada} checked={opcaoSelecionada === 'online'}
-                onClick={() => handleOpcaoClicadaTicket('online')}>
-                <h2>Online</h2> 
-                <h3>R$ 100</h3>
-              </Online>
-            </>
-          </Content>
-          {opcaoSelecionada === 'presencial' ? 
-            <>
               <Instructions>
-              Ótimo! Agora escolha sua modalidade de hospedagem
-              </Instructions> 
+                Primeiro, escolha sua modalidade de ingresso
+              </Instructions>
 
               <Content>
-                <Div>
-                  <NoHotel opcaoHotelSelecionada={opcaoHotelSelecionada} checked={opcaoHotelSelecionada === 'noHotel'}
-                    onClick={() => handleOpcaoClicadaHotel('noHotel') }>
-                    <h2>Sem Hotel</h2> 
-                    <h3>+ R$ 0</h3>
-                  </NoHotel> 
+                <>
+                  <Presencial opcaoSelecionada={opcaoSelecionada} checked={opcaoSelecionada === 'presencial'}
+                    onClick={() => handleOpcaoClicadaTicket('presencial')} >
+                    <h2>Presencial</h2>
+                    <h3>R$ 250</h3>
+                  </Presencial>
 
-                  <WithHotel opcaoHotelSelecionada={opcaoHotelSelecionada} checked={opcaoHotelSelecionada === 'withHotel'}
-                    onClick={() => handleOpcaoClicadaHotel('withHotel') }>
-                    <h2>Com Hotel</h2> 
-                    <h3>+ R$ 350</h3>
-                  </WithHotel>
-                </Div>
-              </Content> 
-               
-              {opcaoHotelSelecionada === 'noHotel' ? 
+                  <Online opcaoSelecionada={opcaoSelecionada} checked={opcaoSelecionada === 'online'}
+                    onClick={() => handleOpcaoClicadaTicket('online')}>
+                    <h2>Online</h2>
+                    <h3>R$ 100</h3>
+                  </Online>
+                </>
+              </Content>
+              {opcaoSelecionada === 'presencial' ?
                 <>
                   <Instructions>
-                  Fechado! O total ficou em R$250 Agora é só confirmar:
-                  </Instructions> 
-            
+                    Ótimo! Agora escolha sua modalidade de hospedagem
+                  </Instructions>
+
+                  <Content>
+                    <Div>
+                      <NoHotel opcaoHotelSelecionada={opcaoHotelSelecionada} checked={opcaoHotelSelecionada === 'noHotel'}
+                        onClick={() => handleOpcaoClicadaHotel('noHotel')}>
+                        <h2>Sem Hotel</h2>
+                        <h3>+ R$ 0</h3>
+                      </NoHotel>
+
+                      <WithHotel opcaoHotelSelecionada={opcaoHotelSelecionada} checked={opcaoHotelSelecionada === 'withHotel'}
+                        onClick={() => handleOpcaoClicadaHotel('withHotel')}>
+                        <h2>Com Hotel</h2>
+                        <h3>+ R$ 350</h3>
+                      </WithHotel>
+                    </Div>
+                  </Content>
+
+                  {opcaoHotelSelecionada === 'noHotel' ?
+                    <>
+                      <Instructions>
+                        Fechado! O total ficou em R$250 Agora é só confirmar:
+                      </Instructions>
+
+                    </>
+
+                    : null}
+
+                  {opcaoHotelSelecionada === 'withHotel' ?
+                    <>
+                      <Instructions>
+                        Fechado! O total ficou em R$600 Agora é só confirmar:
+                      </Instructions>
+
+                    </>
+
+                    : null}
+
                 </>
 
-                : null}  
+                : opcaoSelecionada === 'online' ?
+                  <>
+                    <Instructions>
+                      Fechado! O total ficou em R$100 Agora é só confirmar:
+                    </Instructions>
 
-              {opcaoHotelSelecionada === 'withHotel' ? 
-                <>
-                  <Instructions>
-                  Fechado! O total ficou em R$600 Agora é só confirmar:
-                  </Instructions> 
-            
-                </>
-
-                : null}  
-
+                  </>
+                  : null
+              }
             </>
-      
-            : opcaoSelecionada === 'online'  ? 
-              <>
-                <Instructions>
-                Fechado! O total ficou em R$100 Agora é só confirmar:
-                </Instructions>  
-          
-              </>
-              : null
-          }
+          ) : (
+            <>
+              <Title>
+                Ingresso e Pagamento
+              </Title>
+              <InstructionsNoEnroll>
+                Você precisa completar sua inscrição antes
+                de prosseguir pra escolha de ingresso
+              </InstructionsNoEnroll>
+            </>
+          )
+        ) : tela === 'paying' ? (
+          <>
+            <ChoosenTicket />
+            <CreditCardForm setTela={setTela}/>
+          </>
+        ) : <>
+          <ChoosenTicket />
+          <PaymentSucess/>
         </>
-      ) : (
-        <>
-          <Title>
-            Ingresso e Pagamento
-          </Title>
-          <InstructionsNoEnroll>
-            Você precisa completar sua inscrição antes
-            de prosseguir pra escolha de ingresso
-          </InstructionsNoEnroll>
-        </>
-      )}
+      }
       {/*
       ///////////// Comentando para implementação de primeira tela ///////////       
       <Container>

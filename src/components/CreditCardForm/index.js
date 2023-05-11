@@ -3,7 +3,7 @@ import Cards from 'react-credit-cards';
 import 'react-credit-cards/es/styles-compiled.css';
 import styled from 'styled-components';
 
-export default function CreditCardForm() {
+export default function CreditCardForm(props) {
   const [form, setForm] = React.useState({
     cvc: '',
     expiry: '',
@@ -11,16 +11,40 @@ export default function CreditCardForm() {
     name: '',
     number: '',
   });
+  const [formShown, setFormShown] = React.useState({
+    number: '',
+    expiry: '',
+  });
   const [focus, setFocus] = React.useState('');
   const [submited, setSubmited] = React.useState(false);
 
+  function formatCardNumber(event) {
+    const { value } = event.target;
+    const cardNumberFormatted = value
+      .replace(/\D/g, '')
+      .replace(/(.{4})/g, '$1 ')
+      .trim();
+    setFormShown({ ...formShown, number: cardNumberFormatted });
+  }
+
+  function formatCardExpiry(event) {
+    const { value } = event.target;
+    const cardExpiryFormatted = value
+      .replace(/\D/g, '')
+      .replace(/(\d{2})(\d{2})/, '$1/$2')
+      .substr(0, 5);
+    setFormShown({ ...formShown, expiry: cardExpiryFormatted });
+  }
+
   function handleForm(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
-    console.log(form);
+    if (e.target.name === 'number') formatCardNumber(e);
+    if (e.target.name === 'expiry') formatCardExpiry(e);
   }
 
   function Pay() {
     setSubmited(true);
+    props.setTela('paid');
   }
 
   return(
@@ -40,8 +64,9 @@ export default function CreditCardForm() {
           <BigInput
             type="tel"
             name="number"
-            value={form.number}
+            value={formShown.number}
             placeholder="Card Number"
+            maxLength={19}
             onChange={handleForm}
             onFocus={e => setFocus(e.target.name)}
           />
@@ -53,6 +78,7 @@ export default function CreditCardForm() {
             name="name"
             value={form.name}
             placeholder="Name"
+            maxLength={31}
             onChange={handleForm}
             onFocus={e => setFocus(e.target.name)}
           />
@@ -60,8 +86,9 @@ export default function CreditCardForm() {
             <ExpiryInput
               type="text"
               name="expiry"
-              value={form.expiry}
+              value={formShown.expiry}
               placeholder="Valid Thru"
+              maxLength={4}
               onChange={handleForm}
               onFocus={e => setFocus(e.target.name)}
             />
@@ -70,6 +97,7 @@ export default function CreditCardForm() {
               name="cvc"
               value={form.cvc}
               placeholder="CVC"
+              maxLength={3}
               onChange={handleForm}
               onFocus={e => setFocus(e.target.name)}
             />
@@ -78,7 +106,7 @@ export default function CreditCardForm() {
       </CardDiv>
       <FinalizeButton
         disabled={submited}
-        type="submit"
+        onClick={Pay}
       >FINALIZAR PAGAMENTO</FinalizeButton>
     </>
   );
