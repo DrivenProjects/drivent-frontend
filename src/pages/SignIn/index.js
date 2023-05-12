@@ -13,8 +13,7 @@ import EventInfoContext from '../../contexts/EventInfoContext';
 import UserContext from '../../contexts/UserContext';
 
 import useSignIn from '../../hooks/api/useSignIn';
-import GitHubAuth from '../../components/Form/GitHubAuh';
-import { githubAuth } from '../../services/githubAuthApi';
+// import ka from 'date-fns/locale/ka/index.js';
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
@@ -49,18 +48,6 @@ export default function SignIn() {
     if (code) {
       const body = { code };
       setLoading(true);
-
-      try {
-        const userData = await githubAuth(body);
-        setUserData(userData);
-        setLoading(false);
-        toast('Login realizado com sucesso!');
-        navigate('/dashboard');
-      } catch (error) {
-        toast('Não foi possível fazer o login!');
-        setLoading(false);
-        navigate('/sign-in');
-      }
     }
   }, []);
 
@@ -93,9 +80,6 @@ export default function SignIn() {
             Entrar
           </Button>
         </form>
-      </Row>
-      <Row>
-        <GitHubAuth loading={loading} loadingSignIn={loadingSignIn} />
       </Row>
       <Row>
         <Link to="/enroll">Não possui login? Inscreva-se</Link>
