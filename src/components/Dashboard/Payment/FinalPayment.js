@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import styled from 'styled-components';
 import useSavePayment from '../../../hooks/api/useSavePayment';
 import useTicket from '../../../hooks/api/useTicket';
@@ -7,7 +7,6 @@ import PaymentForm from './PaymentForm';
 import { BsCheckCircle } from 'react-icons/bs';
 import { getPayment } from '../../../services/paymentApi';
 import useToken from '../../../hooks/useToken';
-import { useContext } from 'react';
 import UserContext from '../../../contexts/UserContext';
 
 export default function FinalPayment() {
@@ -18,13 +17,13 @@ export default function FinalPayment() {
   const [confirmPayment, setConfirmPayment] = useState(false);
   const [paymentData, setPaymentData] = useState(undefined);
   const { setConfirmedPayment } = useContext(UserContext);
+  
   useEffect(() => {
     if (ticket) {
       getPayment(ticket.id, token)
         .then((response) => {
           setPaymentData(response);
           setTimeout(() => setConfirmedPayment(true), 0);
-          //setConfirmedPayment(true);
         })
         .catch((error) => {
           setPaymentData({ id: undefined });
@@ -32,41 +31,42 @@ export default function FinalPayment() {
     }
   }, [ticket]);
 
-  if (ticket && paymentData) {
-    const { name, price } = ticket.TicketType;
-    let newName = name;
-
-    if (name === 'Presencial Com Hotel') {
-      newName = 'Presencial + Com Hotel';
-    } else if (name === 'Presencial Sem Hotel') {
-      newName = 'Presencial + Sem Hotel';
-    }
-
-    return (
-      <PaymentContainer>
-        <p>Ingresso escolhido</p>
-        <ButtonSummary>
-          <h1>{newName}</h1>
-          <p>R$ {price / 100}</p>
-        </ButtonSummary>
-        {confirmPayment || paymentData.id ? (
-          <PaymentConfirm>
-            <h6>Pagamento</h6>
-            <div>
-              <Icon />
-              <Box>
-                <p>Pagamento confirmado!</p>
-                <span>Prossiga para escolha de hospedagem e atividades</span>
-              </Box>
-            </div>
-          </PaymentConfirm>
-        ) : (
-          <PaymentForm ticket={ticket} savePayment={savePayment} setConfirmPayment={setConfirmPayment} />
-        )}
-      </PaymentContainer>
-    );
+  if (!ticket || !paymentData) {
+    return <></>;
   }
-  return <></>;
+
+  const { name, price } = ticket.TicketType;
+  let newName = name;
+
+  if (name === 'Presencial Com Hotel') {
+    newName = 'Presencial + Com Hotel';
+  } else if (name === 'Presencial Sem Hotel') {
+    newName = 'Presencial + Sem Hotel';
+  }
+
+  return (
+    <PaymentContainer>
+      <p>Ingresso escolhido</p>
+      <ButtonSummary>
+        <h1>{newName}</h1>
+        <p>R$ {price / 100}</p>
+      </ButtonSummary>
+      {confirmPayment || paymentData.id ? (
+        <PaymentConfirm>
+          <h6>Pagamento</h6>
+          <div>
+            <Icon />
+            <Box>
+              <p>Pagamento confirmado!</p>
+              <span>Prossiga para escolha de hospedagem e atividades</span>
+            </Box>
+          </div>
+        </PaymentConfirm>
+      ) : (
+        <PaymentForm ticket={ticket} savePayment={savePayment} setConfirmPayment={setConfirmPayment} />
+      )}
+    </PaymentContainer>
+  );
 }
 
 const PaymentContainer = styled.div`
