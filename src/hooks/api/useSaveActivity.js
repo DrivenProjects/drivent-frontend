@@ -1,20 +1,20 @@
-import useAsync from '../useAsync';
-import useToken from '../useToken';
+// import useAsync from '../useAsync';
+// import useToken from '../useToken';
 
-import * as activityApi from '../../services/activityApi';
+// import * as activityApi from '../../services/activityApi';
 
-export default function useSaveActivity() {
-  const token = useToken();
+// export default function useSaveActivity() {
+//   const token = useToken();
 
-  const {
-    loading: saveActivityLoading,
-    error: saveActivityError,
-    act: saveActivity,
-  } = useAsync((data) => activityApi.postActivity(data, token), false);
+//   const {
+//     loading: saveActivityLoading,
+//     error: saveActivityError,
+//     act: saveActivity,
+//   } = useAsync((data) => activityApi.postActivity(data, token), false);
 
-  return {
-    saveActivityLoading,
-    saveActivityError,
-    saveActivity,
-  };
-}
+//   return {
+//     saveActivityLoading,
+//     saveActivityError,
+//     saveActivity,
+//   };
+// }
