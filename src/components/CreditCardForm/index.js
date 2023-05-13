@@ -4,7 +4,7 @@ import 'react-credit-cards/es/styles-compiled.css';
 import styled from 'styled-components';
 import { pay } from '../../services/paymentApi';
 import useToken from '../../hooks/useToken';
-import usePay from '../../hooks/api/usePayment';
+import usePay from '../../hooks/api/usePay';
 import { toast } from 'react-toastify';
 
 export default function CreditCardForm(props) {
@@ -22,7 +22,7 @@ export default function CreditCardForm(props) {
   const { payLoading, pay } = usePay();
   const [focus, setFocus] = React.useState('');
   const [submited, setSubmited] = React.useState(false);
-  const ticketId = 2;
+  const ticketId = 4;
   const token = useToken();
   const [paymentData, setPaymentData] = React.useState({});
   const [cardIssuer, setCardIssuer] = React.useState('');
