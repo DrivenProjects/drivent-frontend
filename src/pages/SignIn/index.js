@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,6 +13,7 @@ import EventInfoContext from '../../contexts/EventInfoContext';
 import UserContext from '../../contexts/UserContext';
 
 import useSignIn from '../../hooks/api/useSignIn';
+// import ka from 'date-fns/locale/ka/index.js';
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
@@ -22,6 +23,8 @@ export default function SignIn() {
 
   const { eventInfo } = useContext(EventInfoContext);
   const { setUserData } = useContext(UserContext);
+
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -38,6 +41,16 @@ export default function SignIn() {
     }
   }
 
+  useEffect(async() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const code = queryParams.get('code');
+
+    if (code) {
+      const body = { code };
+      setLoading(true);
+    }
+  }, []);
+
   return (
     <AuthLayout background={eventInfo.backgroundImageUrl}>
       <Row>
@@ -47,15 +60,23 @@ export default function SignIn() {
       <Row>
         <Label>Entrar</Label>
         <form onSubmit={submit}>
-          <Input label="E-mail" type="text" fullWidth value={email} onChange={(e) => setEmail(e.target.value)} />
+          <Input
+            label="E-mail"
+            type="text"
+            fullWidth
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={loadingSignIn || loading}
+          />
           <Input
             label="Senha"
             type="password"
             fullWidth
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            disabled={loadingSignIn || loading}
           />
-          <Button type="submit" color="primary" fullWidth disabled={loadingSignIn}>
+          <Button type="submit" color="primary" fullWidth disabled={loadingSignIn || loading}>
             Entrar
           </Button>
         </form>
