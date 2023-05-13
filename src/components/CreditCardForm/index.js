@@ -76,8 +76,6 @@ export default function CreditCardForm(props) {
       }
     };
 
-    console.log(body);
-    console.log(token);
     try{
       const paymentData = await savePayment(body, token);
       props.setPaymentData(paymentData);
