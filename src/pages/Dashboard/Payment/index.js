@@ -11,6 +11,8 @@ export default function Payment() {
   const [opcaoSelecionada, setOpcaoSelecionada] = useState('');
   const [opcaoHotelSelecionada, setOpcaoHotelSelecionada] = useState('');
   const [tela, setTela] = useState('paying');
+  const isTicketRemote = useState(false);
+  const ticketIncludesHotel = useState(true);
 
   function handleOpcaoClicadaTicket(opcao) {
     if (opcao === opcaoSelecionada) {
@@ -124,11 +126,11 @@ export default function Payment() {
           )
         ) : tela === 'paying' ? (
           <>
-            <ChoosenTicket />
+            <ChoosenTicket isRemote={false} includesHotel={true} value={600}/>
             <CreditCardForm setTela={setTela}/>
           </>
         ) : <>
-          <ChoosenTicket />
+          <ChoosenTicket isRemote={false} includesHotel={true} value={600}/>
           <PaymentSucess/>
         </>
       }
