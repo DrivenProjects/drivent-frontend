@@ -4,12 +4,14 @@ import useSavePayment from '../../../hooks/api/useSavePayment';
 import useTicket from '../../../hooks/api/useTicket';
 import ButtonSummary from './ButtonSummary';
 import PaymentForm from './PaymentForm';
+import ChoosenTicket from '../../../components/ChoosenTicket';
+import CreditCardForm from '../../../components/CreditCardForm';
 import { BsCheckCircle } from 'react-icons/bs';
 import { getPayment } from '../../../services/paymentApi';
 import useToken from '../../../hooks/useToken';
 import UserContext from '../../../contexts/UserContext';
 
-export default function FinalPayment() {
+export default function FinalPayment(props) {
   const { ticket } = useTicket();
   localStorage.setItem('ticket', JSON.stringify(ticket));
   const { savePayment } = useSavePayment();
@@ -46,11 +48,6 @@ export default function FinalPayment() {
 
   return (
     <PaymentContainer>
-      <p>Ingresso escolhido</p>
-      <ButtonSummary>
-        <h1>{newName}</h1>
-        <p>R$ {price / 100}</p>
-      </ButtonSummary>
       {confirmPayment || paymentData.id ? (
         <PaymentConfirm>
           <h6>Pagamento</h6>
@@ -63,7 +60,10 @@ export default function FinalPayment() {
           </div>
         </PaymentConfirm>
       ) : (
-        <PaymentForm ticket={ticket} savePayment={savePayment} setConfirmPayment={setConfirmPayment} />
+        <>
+          <ChoosenTicket isRemote={ticket.TicketType.isRemote} includesHotel={ticket.TicketType.includesHotel} value={ticket.TicketType.price}/>
+          <CreditCardForm ticketId={ticket.id} setConfirmPayment={setConfirmPayment} setPaymentData={setPaymentData}/>
+        </>
       )}
     </PaymentContainer>
   );

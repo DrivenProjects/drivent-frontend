@@ -2,6 +2,11 @@ import React from 'react';
 import Cards from 'react-credit-cards';
 import 'react-credit-cards/es/styles-compiled.css';
 import styled from 'styled-components';
+import { savePayment } from '../../services/paymentApi';
+import useToken from '../../hooks/useToken';
+import usePay from '../../hooks/api/usePayment';
+import { toast } from 'react-toastify';
+import useSavePayment from '../../hooks/api/useSavePayment';
 
 export default function CreditCardForm(props) {
   const [form, setForm] = React.useState({
@@ -15,8 +20,11 @@ export default function CreditCardForm(props) {
     number: '',
     expiry: '',
   });
+  const { savePaymentLoading, savePayment } = useSavePayment();
   const [focus, setFocus] = React.useState('');
   const [submited, setSubmited] = React.useState(false);
+  const token = useToken();
+  const [cardIssuer, setCardIssuer] = React.useState('');
 
   function formatCardNumber(event) {
     const { value } = event.target;
@@ -25,6 +33,7 @@ export default function CreditCardForm(props) {
       .replace(/(.{4})/g, '$1 ')
       .trim();
     setFormShown({ ...formShown, number: cardNumberFormatted });
+    getIssuer();
   }
 
   function formatCardExpiry(event) {
@@ -42,9 +51,43 @@ export default function CreditCardForm(props) {
     if (e.target.name === 'expiry') formatCardExpiry(e);
   }
 
-  function Pay() {
+  async function getIssuer() {
+    const visaRegex = /^4/;
+    const mastercardRegex = /^5[1-5]/;
+    const amexRegex = /^3[47]/;
+    const discoverRegex = /^(6011|65|64[4-9])/;
+
+    if(visaRegex.test(form.number)) setCardIssuer('Visa');
+    if(mastercardRegex.test(form.number)) setCardIssuer('Mastercard');
+    if(amexRegex.test(form.number)) setCardIssuer('American Express');
+    if(discoverRegex.test(form.number)) setCardIssuer('Discover');
+  }
+
+  async function Pay() {
     setSubmited(true);
-    props.setTela('paid');
+    const body = {
+      ticketId: props.ticketId,
+      cardData: {
+        issuer: cardIssuer,
+        number: form.number,
+        name: form.name,
+        expirationDate: formShown.expiry,
+        cvv: form.cvc,
+      }
+    };
+
+    console.log(body);
+    console.log(token);
+    try{
+      const paymentData = await savePayment(body, token);
+      props.setPaymentData(paymentData);
+      toast('pagamento realizado com sucesso!');
+      setSubmited(false);
+      props.setConfirmPayment(true);
+    } catch(e) {
+      toast('Não foi possível realizar o pagamento!');
+      setSubmited(false);
+    }
   }
 
   return(

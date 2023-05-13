@@ -1,17 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 
-function ChoosenTicket() {
+function ChoosenTicket(props) {
   return (
     <ChoosenTicketDiv>
       <h5>
         Ingresso escolhido
       </h5>
       <Container>
-        <h6>Presencial + Com Hotel</h6>
+        <h6>{`${props.isRemote ? 'Online' : 'Presencial'} + ${props.includeHotel ? 'Com Hotel' : 'Sem Hotel'}`}</h6>
         {/* <h6>Presencial + Sem Hotel</h6>
         <h6>Online</h6> */}
-        <p>R$ 600</p>
+        <p>{`R$ ${props.value}`}</p>
       </Container>
     </ChoosenTicketDiv>
   );
