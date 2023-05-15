@@ -6,6 +6,7 @@ import RoomsContainer from './RoomsContainer';
 import useRoomsBooked from '../../../hooks/api/useRoomsBooked.js';
 import styled from 'styled-components';
 
+
 export default function Hotel() {
   const [paymentConfirmed, setPaymentConfirmed] = useState(false);
   const [rooms, setRooms] = useState([]);
@@ -42,8 +43,8 @@ export default function Hotel() {
         } else {
           setPaymentConfirmed(false);
         }
-      } catch (error) {
-        console.log(error.message);
+      } catch (err) {
+        console.log(err.message);
       }
     }
 
@@ -59,8 +60,8 @@ export default function Hotel() {
         console.log(ticketTypes);
         const includesHotel = ticketTypes.some((type) => type.includesHotel);
         setTicketIncludesHotel(includesHotel);
-      } catch (error) {
-        console.log(error.message);
+      } catch (err) {
+        console.log(err.message);
       }
     }
     checkTicketIncludesHotel();
