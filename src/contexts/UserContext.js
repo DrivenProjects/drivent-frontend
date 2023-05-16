@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { createContext } from 'react';
 
 import useLocalStorage from '../hooks/useLocalStorage';
@@ -7,6 +8,21 @@ export default UserContext;
 
 export function UserProvider({ children }) {
   const [userData, setUserData] = useLocalStorage('userData', {});
+  const [confirmedPayment, setConfirmedPayment] = useState(null);
+  const [userActivitiesData, setUserActivitiesData] = useState(undefined);
 
-  return <UserContext.Provider value={{ userData, setUserData }}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider
+      value={{
+        userData,
+        setUserData,
+        confirmedPayment,
+        setConfirmedPayment,
+        userActivitiesData,
+        setUserActivitiesData,
+      }}
+    >
+      {children}
+    </UserContext.Provider>
+  );
 }

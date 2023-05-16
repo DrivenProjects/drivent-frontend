@@ -46,7 +46,7 @@ const Message = styled.div`
   max-width: 320px;
   border-radius: 4px;
   padding: 10px;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, .2);
   color: white;
   text-align: center;
 `;

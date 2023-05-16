@@ -12,7 +12,14 @@ const FormControlWrapper = styled.section`
   flex-direction: column;
 `;
 
-export default function MultiSelect({ label, name, id, value, onChange, children }) {
+export default function MultiSelect({
+  label,
+  name,
+  id,
+  value,
+  onChange,
+  children,
+}) {
   const inputLabelRef = useRef(null);
 
   return (
@@ -25,7 +32,13 @@ export default function MultiSelect({ label, name, id, value, onChange, children
           value={value}
           onChange={onChange}
           input={
-            <OutlinedInput labelWidth={ReactDOM.findDOMNode(inputLabelRef.current)?.offsetWidth} name={name} id={id} />
+            <OutlinedInput
+              labelWidth={
+                ReactDOM.findDOMNode(inputLabelRef.current)?.offsetWidth
+              }
+              name={name}
+              id={id}
+            />
           }
         >
           {children}
