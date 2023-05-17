@@ -11,7 +11,7 @@ function ChoosenTicket(props) {
         <h6>{`${props.isRemote ? 'Online' : 'Presencial'} + ${props.includeHotel ? 'Com Hotel' : 'Sem Hotel'}`}</h6>
         {/* <h6>Presencial + Sem Hotel</h6>
         <h6>Online</h6> */}
-        <p>{`R$ ${props.value}`}</p>
+        <p>{`R$ ${props.value / 100}`}</p>
       </Container>
     </ChoosenTicketDiv>
   );
