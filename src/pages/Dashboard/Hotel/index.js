@@ -3,6 +3,7 @@ import HotelsContainer from './HotelsContainer';
 import RoomsContainer from './RoomsContainer';
 import { useState } from 'react';
 import useRoomsBooked from '../../../hooks/api/useRoomsBooked';
+import HotelResume from '../../../components/HotelResume';
 
 export default function Hotel() {
   const [rooms, setRooms] = useState([]);
@@ -22,6 +23,11 @@ export default function Hotel() {
           <RoomsContainer rooms={rooms} allBookedRooms={allBookedRooms} />
         </>
       )}
+      {/** ///// implementação do desktop 12
+      <h3>Você já escolheu seu quarto</h3>
+      <HotelResume/>
+      <ChangeRoomButton>TROCAR DE QUARTO</ChangeRoomButton>
+    */}
     </Container>
   );
 }
@@ -65,4 +71,14 @@ const ContainerWarning = styled.div`
     text-align: center;
     color: #8e8e8e;
   }
+`;
+
+const ChangeRoomButton = styled.button`
+  height: 37px;
+  width: 182px;
+  border: none;
+  border-radius: 4px;
+  box-shadow: 0px 2px 10px 0px #00000040;
+  margin-top: 20px;
+  cursor: pointer;
 `;
