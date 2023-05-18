@@ -2,15 +2,17 @@ import React from 'react';
 import styled from 'styled-components';
 import useRoomsByHotelId from '../../../hooks/api/useRoomsByHotelId';
 
-function HotelCard({ hotel, setRooms }) {
+function HotelCard({ hotel, setRooms, setAbleReserveButton, setHotelClicked, hotelClicked }) {
   const { roomsByHotelId } = useRoomsByHotelId(hotel.id);
 
   function openRooms() {
     setRooms(roomsByHotelId?.Rooms);
+    setAbleReserveButton(false);
+    setHotelClicked(hotel.id);
   }
 
   return (
-    <Container onClick={openRooms}>
+    <Container onClick={openRooms} style={{ background: hotelClicked === hotel.id ? '#FFEED2' : '#ebebeb' }}>
       <img src={hotel.image} alt="" />
       <h4>{hotel.name}</h4>
       <h6>Tipos de acomodação:</h6>
@@ -28,7 +30,6 @@ const Container = styled.div`
   padding: 10px 12px 12px 12px;
   width: 194px;
   height: 264px;
-  background: #ebebeb;
   border-radius: 10px;
   img {
     border-radius: 10px;

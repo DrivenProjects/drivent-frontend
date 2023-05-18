@@ -2,30 +2,55 @@ import React from 'react';
 import styled from 'styled-components';
 import { FaUserAlt, FaRegUser } from 'react-icons/fa';
 
-function RoomCard({ room, allBookedRooms }) {
+function RoomCard({ room, allBookedRooms, selectedRoom, setSelectedRoom, setAbleReserveButton }) {
   let occupied = 0;
 
-  for (let i = 0; i < allBookedRooms.length; i++) {
+  for (let i = 0; i < allBookedRooms?.length; i++) {
     if (allBookedRooms[i] === room.id) {
       occupied++;
     }
   }
 
   const vaciences = room.capacity - occupied;
+  const clickedIcon = vaciences - 1;
 
   const iconsFilled = Array(occupied).fill(<FaUserAlt />);
-  const iconsEmpty = Array(vaciences).fill(<FaRegUser />);
+  const iconsEmpty = clickedIcon > 0 ? Array(clickedIcon).fill(<FaRegUser />) : null;
+
+  function handleClicked() {
+    setSelectedRoom(room.id);
+    setAbleReserveButton(true);
+  }
+
   return (
-    <Container>
-      <p>{room.name}</p>
+    <Container
+      onClick={handleClicked}
+      style={{
+        background: selectedRoom === room.id ? '#FFEED2' : vaciences <= 0 || clickedIcon <= -1 ? '#E9E9E9' : 'white',
+        pointerEvents: vaciences <= 0 || clickedIcon <= -1 ? 'none' : 'pointer',
+      }}
+    >
+      <p style={{ color: vaciences <= 0 || clickedIcon <= -1 ? 'gray' : 'black' }}>{room.name}</p>
       <div>
         <div>
           {iconsFilled.map((icon, index) => (
-            <div key={index}>{icon}</div>
+            <div
+              key={index}
+              style={{
+                color: vaciences <= 0 || clickedIcon <= -1 ? 'gray' : 'black',
+              }}
+            >
+              {icon}
+            </div>
           ))}
-          {iconsEmpty.map((icon, index) => (
-            <div key={index}>{icon}</div>
-          ))}
+          {selectedRoom === room.id ? (
+            <div style={{ color: 'red' }}>
+              <FaUserAlt />
+            </div>
+          ) : (
+            <div>{vaciences <= 0 || clickedIcon <= -1 ? null : <FaRegUser />}</div>
+          )}
+          {clickedIcon > 0 ? iconsEmpty?.map((icon, index) => <div key={index}>{icon}</div>) : null}
         </div>
       </div>
     </Container>
@@ -41,6 +66,7 @@ const Container = styled.div`
   padding: 0 10px;
   border: 1px solid #cecece;
   border-radius: 10px;
+  cursor: pointer;
   p {
     font-weight: 700;
     font-size: 20px;
