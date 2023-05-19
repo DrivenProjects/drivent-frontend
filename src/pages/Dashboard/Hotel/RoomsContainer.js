@@ -2,11 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 import RoomCard from './RoomCard';
 
-function RoomsContainer({ rooms, allBookedRooms }) {
+function RoomsContainer({ rooms, allBookedRooms, setAbleReserveButton, selectedRoom, setSelectedRoom }) {
   return (
     <Container>
       {rooms.map((room) => (
-        <RoomCard key={room.id} room={room} allBookedRooms={allBookedRooms} />
+        <RoomCard
+          key={room.id}
+          room={room}
+          selectedRoom={selectedRoom}
+          setSelectedRoom={setSelectedRoom}
+          allBookedRooms={allBookedRooms}
+          setAbleReserveButton={setAbleReserveButton}
+        />
       ))}
     </Container>
   );
