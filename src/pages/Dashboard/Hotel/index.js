@@ -7,6 +7,7 @@ import HotelResume from '../../../components/HotelResume';
 import { toast } from 'react-toastify';
 import useSaveBooking from '../../../hooks/api/useSaveBooking';
 import useBooking from '../../../hooks/api/useBooking';
+import useHotel from '../../../hooks/api/useHotel';
 
 export default function Hotel() {
   const [rooms, setRooms] = useState([]);
@@ -15,7 +16,7 @@ export default function Hotel() {
   const [ableReserveButton, setAbleReserveButton] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [hotelClicked, setHotelClicked] = useState(null);
-
+  const { hotels } = useHotel();
   const { saveBooking } = useSaveBooking();
 
   const allBookedRooms = roomsBooked?.map((r) => r.roomId);
@@ -65,7 +66,7 @@ export default function Hotel() {
       ) : (
         <>
           <h3>Você já escolheu seu quarto</h3>
-          <HotelResume booking={booking}/>
+          <HotelResume booking={booking} hotels={hotels}/>
           <ChangeRoomButton>TROCAR DE QUARTO</ChangeRoomButton>
         </>
       ) }
