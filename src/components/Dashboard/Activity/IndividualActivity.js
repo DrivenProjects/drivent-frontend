@@ -3,7 +3,6 @@ import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import UserContext from '../../../contexts/UserContext';
 import useSaveActivity from '../../../hooks/api/useSaveActivity';
-import { FaRegCheckCircle } from 'react-icons/fa';
 import useUserActivities from '../../../hooks/api/useActivity';
 import useActivityInscriptions from '../../../hooks/api/useActivityInscriptions';
 
@@ -52,50 +51,19 @@ export default function IndividualActivity({ activity }) {
       }
     }
   }
+  
   if (InscriptionsActivity) {
+    const isActivityFull = activity.capacity - InscriptionsActivity.amount === 0;
+    const isUserRegistered = activitiesId.includes(activity.id);
     return (
-      <ActivityInformation activityHeight={calculateDuration()} registered={activitiesId.includes(activity.id)}>
+      <ActivityInformation activityHeight={calculateDuration()} registered={isUserRegistered}>
         <div>
           <h2>{activity.name}</h2>
           <p>{activity.schedules}</p>
         </div>
-        {activity.capacity - InscriptionsActivity.amount !== 0 ? (
-          <Vacancy style={{ fontSize: '30px', color: '#078632' }} registered={activitiesId.includes(activity.id)}>
-            {activitiesId.includes(activity.id) ? (
-              <>
-                <Registered>
-                  <FaRegCheckCircle />
-                  <p>Inscrito</p>
-                </Registered>
-              </>
-            ) : (
-              <>
-                <div onClick={() => bookActivity(activity.id)}>
-                  <ion-icon name="log-in-outline"></ion-icon>
-                </div>
-                <p style={{ color: '#078632' }}>{activity.capacity - InscriptionsActivity.amount} vagas</p>{' '}
-              </>
-            )}
-          </Vacancy>
-        ) : (
-          <Vacancy disabled={true} registered={activitiesId.includes(activity.id)}>
-            {activitiesId.includes(activity.id) ? (
-              <>
-                <Registered>
-                  <FaRegCheckCircle />
-                  <p>Inscrito</p>
-                </Registered>
-              </>
-            ) : (
-              <>
-                <div>
-                  <ion-icon style={{ fontSize: '30px', color: 'red' }} name="close-circle-outline"></ion-icon>
-                </div>
-                <p style={{ color: 'red' }}>Esgotado</p>
-              </>
-            )}
-          </Vacancy>
-        )}
+        <Vacancy onClick={isActivityFull ? null : () => bookActivity(activity.id)} style={{ fontSize: '30px', color: isActivityFull ? 'red' : '#078632' }} registered={isUserRegistered}>
+          {isUserRegistered ? 'Inscrito' : (isActivityFull ? 'Esgotado' : 'Inscrever-se')}
+        </Vacancy>
       </ActivityInformation>
     );
   } else {
@@ -145,17 +113,5 @@ const Vacancy = styled.button`
   font-size: 19px;
   p {
     font-size: 9px;
-  }
-`;
-
-const Registered = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size: 19px;
-  p {
-    font-size: 9px;
-    color: #078632;
   }
 `;
