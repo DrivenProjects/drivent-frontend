@@ -6,14 +6,17 @@ import useRoomsBooked from '../../../hooks/api/useRoomsBooked';
 import HotelResume from '../../../components/HotelResume';
 import { toast } from 'react-toastify';
 import useSaveBooking from '../../../hooks/api/useSaveBooking';
+import useBooking from '../../../hooks/api/useBooking';
+import useHotel from '../../../hooks/api/useHotel';
 
 export default function Hotel() {
   const [rooms, setRooms] = useState([]);
   const { roomsBooked } = useRoomsBooked();
+  const { booking } = useBooking();
   const [ableReserveButton, setAbleReserveButton] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [hotelClicked, setHotelClicked] = useState(null);
-
+  const { hotels } = useHotel();
   const { saveBooking } = useSaveBooking();
 
   const allBookedRooms = roomsBooked?.map((r) => r.roomId);
@@ -35,34 +38,40 @@ export default function Hotel() {
   return (
     <Container>
       <h1>Escolha de hotel e quarto</h1>
-      <h3>Primeiro, escolha seu hotel</h3>
-
-      <HotelsContainer
-        rooms={rooms}
-        setRooms={setRooms}
-        setAbleReserveButton={setAbleReserveButton}
-        hotelClicked={hotelClicked}
-        setHotelClicked={setHotelClicked}
-      />
-      {rooms?.length > 0 && (
+      { !booking ? (
         <>
-          <h3>Ótima pedida! Agora escolha seu quarto:</h3>
-          <RoomsContainer
+          <h3>Primeiro, escolha seu hotel</h3>
+          <HotelsContainer
             rooms={rooms}
-            allBookedRooms={allBookedRooms}
-            ableReserveButton={ableReserveButton}
+            setRooms={setRooms}
             setAbleReserveButton={setAbleReserveButton}
-            selectedRoom={selectedRoom}
-            setSelectedRoom={setSelectedRoom}
+            hotelClicked={hotelClicked}
+            setHotelClicked={setHotelClicked}
           />
+          {rooms?.length > 0 && (
+            <>
+              <h3>Ótima pedida! Agora escolha seu quarto:</h3>
+              <RoomsContainer
+                rooms={rooms}
+                allBookedRooms={allBookedRooms}
+                ableReserveButton={ableReserveButton}
+                setAbleReserveButton={setAbleReserveButton}
+                selectedRoom={selectedRoom}
+                setSelectedRoom={setSelectedRoom}
+              />
+            </>
+          )}
+          {ableReserveButton && <button onClick={(e) => handleSaveBooking(e)}>Reserve Quarto</button>}
         </>
-      )}
-      {ableReserveButton && <button onClick={(e) => handleSaveBooking(e)}>Reserve Quarto</button>}
+      ) : (
+        <>
+          <h3>Você já escolheu seu quarto</h3>
+          <HotelResume booking={booking} hotels={hotels}/>
+          <ChangeRoomButton>TROCAR DE QUARTO</ChangeRoomButton>
+        </>
+      ) }
+      
     </Container>
-    // implementação do desktop 12
-    //     <h3>Você já escolheu seu quarto</h3>
-    //     <HotelResume/>
-    //     <ChangeRoomButton>TROCAR DE QUARTO</ChangeRoomButton>
   );
 }
 
