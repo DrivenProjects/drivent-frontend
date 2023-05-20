@@ -11,16 +11,6 @@ export default function ChooseActivies({
   if (!activityType) {
     return 'Carregando...';
   }
-  
-  // return (
-  //   <ChooseActivies
-  //     activityType={activityType}
-  //     filterActivity={filterActivity}
-  //     setFilterActivity={setFilterActivity}
-  //     isSelectedDay={isSelectedDay}
-  //     setselectedDay={setselectedDay}
-  //   />
-  // );
 
   let activitiesByDate = [];
   let activitiesInfo = [];
