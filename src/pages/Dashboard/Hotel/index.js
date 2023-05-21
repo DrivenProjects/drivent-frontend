@@ -8,9 +8,12 @@ import { toast } from 'react-toastify';
 import useSaveBooking from '../../../hooks/api/useSaveBooking';
 import useBooking from '../../../hooks/api/useBooking';
 import useHotel from '../../../hooks/api/useHotel';
+import useToken from '../../../hooks/useToken';
+import api from '../../../services/api';
 
-export default function Hotel() {
+export default function Hotel({ hotel }) {
   const [rooms, setRooms] = useState([]);
+  const token = useToken();
   const { roomsBooked } = useRoomsBooked();
   const { booking } = useBooking();
   const [ableReserveButton, setAbleReserveButton] = useState(false);
@@ -18,14 +21,17 @@ export default function Hotel() {
   const [hotelClicked, setHotelClicked] = useState(null);
   const { hotels } = useHotel();
   const { saveBooking } = useSaveBooking();
-
   const allBookedRooms = roomsBooked?.map((r) => r.roomId);
-  async function handleSaveBooking(e) {
+  const [update, setUpdate] = useState(false);
+  const [ableUpdateButton, setAbleUpdateButton] = useState(true);
+  console.log(update);
+
+  /*   console.log(openRooms);
+ */  async function handleSaveBooking(e) {
     e.preventDefault();
     const newData = {
       roomId: selectedRoom,
     };
-
     try {
       await saveBooking(newData);
       toast('Reserva realizada!');
@@ -35,10 +41,38 @@ export default function Hotel() {
     }
   }
 
+  const handleClick = () => {
+    setAbleUpdateButton(false);
+    setUpdate(true);
+  };
+  async function handleUpdateBooking(e) {
+    e.preventDefault();
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);    
+    try {
+      const response = await api.put(
+        `/booking/${booking.id}`,
+        { roomId: selectedRoom },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      /* await updateBooking(update, booking.id, token);
+      console.log(token); */
+      toast('Reserva realizada!');
+      return response.data;
+    } catch (err) {
+      toast('Não foi possível salvar suas informações!');
+    }
+  }
+
   return (
     <Container>
       <h1>Escolha de hotel e quarto</h1>
-      { !booking ? (
+      {!booking ? (
         <>
           <h3>Primeiro, escolha seu hotel</h3>
           <HotelsContainer
@@ -66,11 +100,30 @@ export default function Hotel() {
       ) : (
         <>
           <h3>Você já escolheu seu quarto</h3>
-          <HotelResume booking={booking} hotels={hotels}/>
-          <ChangeRoomButton>TROCAR DE QUARTO</ChangeRoomButton>
+          <HotelResume booking={booking} hotels={hotels} />
+          {ableUpdateButton && <ChangeRoomButton onClick={() => handleClick(true)} > Trocar de quarto</ChangeRoomButton>}
+          {update === true && (
+            <>
+              <HotelsContainer
+                rooms={rooms}
+                setRooms={setRooms}
+                setAbleReserveButton={setAbleReserveButton}
+                hotelClicked={hotelClicked}
+                setHotelClicked={setHotelClicked}
+              />
+              <RoomsContainer
+                rooms={rooms}
+                allBookedRooms={allBookedRooms}
+                ableReserveButton={ableReserveButton}
+                setAbleReserveButton={setAbleReserveButton}
+                selectedRoom={selectedRoom}
+                setSelectedRoom={setSelectedRoom}
+              />
+              <ChangeRoomButton onClick={(e) => handleUpdateBooking(e)} > Trocar de quarto</ChangeRoomButton>
+            </>
+          )}
         </>
-      ) }
-      
+      )}
     </Container>
   );
 }
